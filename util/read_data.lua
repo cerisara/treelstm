@@ -23,6 +23,7 @@ function treelstm.read_sentences(path, vocab)
     for i = 1, len do
       local token = tokens[i]
       sent[i] = vocab:index(token)
+      print("loadutt",i,len,token,sent[i])
     end
     sentences[#sentences + 1] = sent
   end
@@ -183,9 +184,12 @@ function treelstm.read_sentiment_dataset(dir, vocab, fine_grained, dependency)
 
   dataset.size = #dataset.trees
   dataset.labels = torch.Tensor(dataset.size)
+  print("detdataset",dataset.size)
   for i = 1, dataset.size do
     remap_labels(dataset.trees[i], fine_grained)
     dataset.labels[i] = dataset.trees[i].gold_label
+    print("dety",dataset.labels[i])
+    print("detx",dataset.sents[i])
   end
   return dataset
 end
