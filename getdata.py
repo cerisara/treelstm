@@ -1,5 +1,6 @@
 import codecs 
 from collections import Counter
+import random
 
 wstrinutts = []
 widxinutts = []
@@ -32,7 +33,7 @@ with codecs.open('log','r','utf8') as f:
                     widxinvoc=int(l[i+1:pos[9]])
                     break
             wstr.append(w)
-            widx.append(widxinutt)
+            widx.append(widxinvoc)
             if w in voc.keys(): assert voc[w]==widxinvoc
             else: voc[w]=widxinvoc
             if widxinutt==nwinutt:
@@ -59,12 +60,27 @@ with codecs.open('log','r','utf8') as f:
                     labs.append(y)
                     break
 
+vocinv={}
+for k,v in voc.items(): vocinv[v]=k
+
 print("corps",len(train),len(test),len(dev),len(voc))
 print("labs",len(trainlabs),len(testlabs),len(devlabs))
 
 print("ll",min(trainlabs),max(trainlabs))
-nkepttr=len([y for y in trainlabs if not y==3])
-nkeptte=len([y for y in testlabs if not y==3])
-nkeptde=len([y for y in devlabs if not y==3])
+kepttr=[i for i in range(len(trainlabs)) if not trainlabs[i]==3]
+nkepttr=len(kepttr)
+keptte=[i for i in range(len(testlabs)) if not testlabs[i]==3]
+nkeptte=len(keptte)
+keptde=[i for i in range(len(devlabs)) if not devlabs[i]==3]
+nkeptde=len(keptde)
 print("filt",nkepttr,nkeptte,nkeptde)
+
+random.shuffle(kepttr)
+m=kepttr
+for i in range(20):
+    y=trainlabs[m[i]]
+    x=' '.join([vocinv[x] for x in train[m[i]]])
+    print(str(y)+" "+x)
+
+# lab=1 ou 2 = neg, 4 ou 5 = pos
 
